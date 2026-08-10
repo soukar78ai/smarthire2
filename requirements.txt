@@ -1,0 +1,11 @@
+streamlit>=1.37
+chromadb>=0.5
+sentence-transformers>=3.0
+pypdf>=4.2
+pdfplumber>=0.11
+python-docx>=1.1
+pandas>=2.2
+openpyxl>=3.1
+groq>=0.9
+python-dotenv>=1.0
+supabase>=2.7
