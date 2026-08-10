@@ -5,7 +5,23 @@ and a local sentence-transformers embedding model. No API calls, no cost,
 no rate limits - this is what makes semantic search free at 50-500 resumes.
 """
 import os
+import sys
 from typing import Optional
+
+# --- Streamlit Community Cloud sqlite3 fix ---
+# Streamlit Cloud's Linux environment ships an old system sqlite3 that Chroma
+# rejects (requires >= 3.35.0). pysqlite3-binary bundles a modern sqlite3
+# build; we swap it into sys.modules BEFORE chromadb is imported below, since
+# chromadb reads sqlite3 at import time. This only runs on Linux (where the
+# old-sqlite3 problem exists and pysqlite3-binary wheels are available) -
+# doing this on Windows breaks local dev, per Chroma/Streamlit community
+# guidance, and isn't needed there anyway (Windows Python ships modern sqlite3).
+if sys.platform.startswith("linux"):
+    try:
+        __import__("pysqlite3")
+        sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
+    except ImportError:
+        pass  # pysqlite3-binary not installed - fall back to system sqlite3
 
 import chromadb
 from sentence_transformers import SentenceTransformer

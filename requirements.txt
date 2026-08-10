@@ -9,3 +9,8 @@ openpyxl>=3.1
 groq>=0.9
 python-dotenv>=1.0
 supabase>=2.7
+
+# Fixes ChromaDB's sqlite3 version requirement on Streamlit Community Cloud
+# (Linux). Skipped on Windows/macOS via the environment marker below, since
+# it's unnecessary there and vector_store.py only activates the swap on Linux.
+pysqlite3-binary; sys_platform == "linux"
