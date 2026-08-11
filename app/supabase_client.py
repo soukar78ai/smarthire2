@@ -7,27 +7,28 @@ similarity search do NOT go through Supabase - see vector_store.py.
 Uses the service_role key on purpose: this app never runs in a browser,
 so it's safe to use the elevated key here. Never expose this key client-side.
 """
-import os
 from datetime import datetime, timezone
 from typing import Optional
 
 from supabase import create_client, Client
+
+from app import config
 
 _client: Optional[Client] = None
 
 
 def get_client() -> Optional[Client]:
     """
-    Returns a cached Supabase client, or None if SUPABASE_URL /
-    SUPABASE_SERVICE_ROLE_KEY aren't configured. Metadata sync is optional -
-    the app should keep working (Chroma + local files) even without Supabase.
+    Returns a cached Supabase client, or None if SUPABASE_URL / SUPABASE_KEY
+    aren't configured. Metadata sync is optional - the app should keep
+    working (Chroma + local files) even without Supabase.
     """
     global _client
     if _client is not None:
         return _client
 
-    url = os.getenv("SUPABASE_URL")
-    key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+    url = config.SUPABASE_URL
+    key = config.SUPABASE_KEY
     if not url or not key or "your-project-ref" in url:
         return None
 

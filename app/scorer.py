@@ -9,9 +9,10 @@ If GROQ_API_KEY is missing or the call fails, callers should fall back to
 a semantic-only score (see fitment.py) so the app keeps working.
 """
 import json
-import os
 
 from groq import Groq
+
+from app import config
 
 SYSTEM_PROMPT = """You are a recruitment screening assistant. You evaluate how well a \
 candidate's resume matches a job description, using only the information provided. Be \
@@ -38,7 +39,7 @@ Return ONLY the JSON object, no markdown fences, no other text."""
 
 
 def _get_client() -> Groq | None:
-    api_key = os.getenv("GROQ_API_KEY")
+    api_key = config.GROQ_API_KEY
     if not api_key or api_key == "your_groq_api_key_here":
         return None
     return Groq(api_key=api_key)
@@ -54,7 +55,7 @@ def score_resume_against_jd(jd_text: str, resume_text: str, candidate_name: str)
     if client is None:
         return None
 
-    model = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+    model = config.GROQ_MODEL
 
     try:
         response = client.chat.completions.create(
