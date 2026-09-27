@@ -1,0 +1,27 @@
+# Runs the equity agents every weekday morning before NSE opens (09:15 IST)
+# and attaches the brief to the run as a downloadable artifact.
+# Add GROQ_API_KEY under Settings > Secrets and variables > Actions for the
+# LLM narrative; without it the agents run in rule-based mode.
+name: Equity daily brief
+
+on:
+  schedule:
+    - cron: "15 2 * * 1-5"   # 07:45 IST, Mon-Fri
+  workflow_dispatch:
+
+jobs:
+  brief:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install groq python-dotenv pandas -r equity_agents/requirements.txt
+      - run: python -m equity_agents.cli daily | tee -a "$GITHUB_STEP_SUMMARY"
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: equity-brief
+          path: reports/*.md

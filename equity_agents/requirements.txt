@@ -1,0 +1,4 @@
+# Extra dependencies for the equity agents (on top of the root requirements.txt):
+#   pip install -r requirements.txt -r equity_agents/requirements.txt
+yfinance>=0.2.50
+feedparser>=6.0

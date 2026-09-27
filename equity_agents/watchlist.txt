@@ -1,0 +1,17 @@
+# One NSE symbol per line (no ".NS" suffix). Lines starting with # are ignored.
+# Edit freely - this is the universe the DailyAdvisor scans every day.
+RELIANCE
+TCS
+HDFCBANK
+ICICIBANK
+INFY
+BHARTIARTL
+ITC
+LT
+SBIN
+HINDUNILVR
+BAJFINANCE
+MARUTI
+SUNPHARMA
+ASIANPAINT
+TITAN
